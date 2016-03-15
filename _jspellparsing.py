@@ -119,7 +119,7 @@ class jspell(object):
         dict_key = [
             dict(
                  function = word, 
-                 pattern = '^(?P<a>[^\/]+)[\/](?P<b>[^\/]+)[\/]?(?P<rule>[^\/]+)?[\/]$'
+                 pattern = '^(?P<palavra>[^\/]+)[\/](?P<grama>[^\/]+)[\/]?(?P<rule>[^\/]+)?[\/]$'
             )
             ]
         for w in js_dict:
@@ -136,8 +136,35 @@ class jspell(object):
         line = line.strip()
         if bool(line):        
             return line
-    
-    
+            
+    def inflections(self, rules,words):
+        inf = {}        
+        for w in words:
+            r = w['rule']
+            inf[w['palavra']] = [] 
+            if r is not None:
+                for l in r:
+                    rr =  rules['rule'][l]
+                    for rl in rr: 
+                        if rl['ps'] == 'p':
+                            pattern = r'^%s' % (rl['regex'].replace(' ',''))
+                            reg = re.search(pattern,w['palavra'].upper())
+                            if reg is not None:
+                                if rl['replace'] is not None:
+                                    p = re.sub('^%s' % (rl['replace']),rl['replaced'],w['palavra'].upper())
+                                else:
+                                    p = '%s%s' % (rl['replaced'],w['palavra'])
+                                inf[w['palavra']].append(p.lower())
+                        if rl['ps'] == 's':
+                            pattern = r'%s$' % (rl['regex'].replace(' ',''))
+                            reg = re.search(pattern,w['palavra'].upper())
+                            if reg is not None:
+                                if rl['replace'] is not None:
+                                    p = re.sub('%s$' % (rl['replace']),rl['replaced'],w['palavra'].upper())
+                                else:
+                                    p = '%s%s' % (w['palavra'],rl['replaced'])
+                                inf[w['palavra']].append(p.lower())
+        return inf
  #flag\s+[\+\*](?P<flag>\S):(\s+;\s+"((?P<grama>\S*))")?
  #(?P<regex>.*)\s+>\s+(-(?P<replace>\S*),)?(?P<replaced>\S*)\s+;\s+"(?P<grama>.*)?"      
  #allaffixes\s*(?P<turn>\S*)
