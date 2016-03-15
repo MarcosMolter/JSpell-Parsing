@@ -12,5 +12,14 @@ apresenta-se como estrutura para analise textual, lemmatizing, tokenize e stem
 ##Instalação
 
 ##Utilização
-
+<code> import jspellparsing </code>
 ##Exemplos
+<pre>
+  <code>
+        jspell = jspellparsing.jspell
+        linhas = jspell.load_data('aff')
+        rules_obj = jspell.rules_dict(linhas)       
+        linhas = jspell.load_data('dic')
+        dict_obj = jspell.jspell_dict(linhas) 
+  </code>
+</pre>  
