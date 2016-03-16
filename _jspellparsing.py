@@ -29,8 +29,17 @@ class jspell(object):
     def load_data(self,jtype):
         aff_path = self.files[jtype]
         aff_file = open(aff_path,'r')
-        lines = filter(None,map(self.__valid_rule,aff_file))        
+        if jtype == 'aff':       
+            lines = filter(None,map(self.__valid_rule,aff_file))        
+        if jtype == 'dic':
+            lines = aff_file
         return lines
+        
+    def __valid_rule(self, line):
+        line = re.sub(r'\n|#.*','',line)       
+        line = line.strip()
+        if bool(line):        
+            return line    
 
     def rules_dict(self,rules):
         rules_obj = {}
@@ -131,12 +140,7 @@ class jspell(object):
         return word_obj            
 
 
-    def __valid_rule(self, line):
-        line = re.sub(r'\n|#.*','',line)       
-        line = line.strip()
-        if bool(line):        
-            return line
-            
+     
     def inflections(self, rules,words):
         inf = {}        
         for w in words:
@@ -165,6 +169,17 @@ class jspell(object):
                                     p = '%s%s' % (w['palavra'],rl['replaced'])
                                 inf[w['palavra']].append(p.lower())
         return inf
+    
+    def lemmatize(self,lex,w):
+        find = [k for (k,v) in lex.iteritems() if w in v]
+        if find == []:
+            return w
+        else:
+            return find
+            
+
+
+
  #flag\s+[\+\*](?P<flag>\S):(\s+;\s+"((?P<grama>\S*))")?
  #(?P<regex>.*)\s+>\s+(-(?P<replace>\S*),)?(?P<replaced>\S*)\s+;\s+"(?P<grama>.*)?"      
  #allaffixes\s*(?P<turn>\S*)
