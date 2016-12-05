@@ -11,6 +11,8 @@ apresenta-se como estrutura para analise textual, lemmatizing, tokenize e stem
 ***
 ##Instalação
 
+Utilize um programa de gerenciamento de repositório para instanciar um clone deste [Link](https://github.com/MarcosMolter/JSpell-Parsing "JSpell-Parsing") para a pasta \<path\>\Python27\Lib\site-packages ou acesse diretamente o repositório https://github.com/MarcosMolter/JSpell-Parsing para donwload
+
 ##Utilização
 <code> import jspellparsing </code>
 ##Exemplos
